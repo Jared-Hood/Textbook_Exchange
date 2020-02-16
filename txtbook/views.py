@@ -9,3 +9,6 @@ from django.template import loader
 
 def index(request):
     return render(request, 'txtbook/index.html')
+
+def addTextbook(request):
+    return render(request, 'txtbook/addtextbook.html')
