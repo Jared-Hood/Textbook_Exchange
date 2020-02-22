@@ -19,7 +19,7 @@ def index(request):
 #     return render(request, 'txtbook/allposts.html')
 
 class allPostsView(generic.ListView):
-    template_name = 'txtbook/allposts.html'
+    template_name = 'txtbook/allPosts.html'
     context_object_name = 'latest_post_list'
 
     def get_queryset(self):
