@@ -74,6 +74,10 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
+# postgres is automatically implemented username; used the following resources to set up postgres:
+# https://www.postgresqltutorial.com/connect-to-postgresql-database/
+# https://www.postgresqltutorial.com/postgresql-drop-database/
+# http://www.learningaboutelectronics.com/Articles/How-to-delete-all-objects-of-a-database-table-in-Django.php
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
