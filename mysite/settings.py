@@ -80,7 +80,7 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # http://www.learningaboutelectronics.com/Articles/How-to-delete-all-objects-of-a-database-table-in-Django.php
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD': 'password',
