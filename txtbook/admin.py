@@ -3,4 +3,9 @@ from .models import TextbookPost
 from .models import Textbook
 # Register your models here.
 admin.site.register(TextbookPost)
-admin.site.register(Textbook)
+
+class textbook_admin(admin.ModelAdmin):
+    list_display = ('title','author','dept','classnum','sect')
+
+
+admin.site.register(Textbook,textbook_admin)
