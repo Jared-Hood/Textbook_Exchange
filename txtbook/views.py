@@ -1,11 +1,12 @@
 # Create your views here.
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import get_object_or_404, render
+from django.contrib import messages
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 from django.template import loader
-
+import csv, io
 from .models import Textbook, TextbookPost
 
 
@@ -91,3 +92,25 @@ def addTextbook(request):
 # =======
     return render(request, 'txtbook/addTextbook.html')
 # >>>>>>> 0b2597a8a7905ec2e8f13a8e580f82950ccaf5eb
+
+def textbook_upload(request):
+    template = "txtbook/textbook_upload.html"
+    prompt = {
+        'order' : 'Order of the TSV should be dept, course nbr, sect, instructor (ignore), title, isbn, new price, used price, and then amazon link'
+    }
+    if request.method == "GET":
+        return render(request, template, prompt)
+    tsv_file = request.FILES['file']
+    if not tsv_file.name.endswith('.tsv'):
+        message.error(request,'This is not a tsv file')
+    data_set = tsv_file.read().decode('UTF-8')
+    io_string = io.StringIO(data_set)
+    next(io_string)
+    for column in csv.reader(io_string, delimiter='\t'):
+        if(column[4] == ""):
+            continue
+        created = Textbook.objects.create(
+            dept=column[0],classnum=column[1],sect=column[2],title=column[4],author=column[5],isbn=column[6], newPriceBookstore=column[7],usedPriceBookstore=column[8],amazonLink=column[9]
+        )
+    context = {}
+    return render(request,template,context)
