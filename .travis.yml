@@ -7,6 +7,6 @@ deploy:
 services:
   - postgresql
 before_script:
-  - psql -c 'alter user test createdb;' -U postgres
+  - psql -c 'alter user postgres createdb;' -U postgres
 script:
   python manage.py test
