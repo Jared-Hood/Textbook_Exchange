@@ -4,10 +4,11 @@ deploy:
   api_key:
     secure: fa08ea17-ce58-48d0-81c2-81731aeb9141
   app: textbooks-exchange
+services:
+  - postgresql
+
 before_script:
- - psql -U postgres -c 'CREATE DATABASE postgres;'
- - psql -U postgres -c "CREATE USER postgres WITH PASSWORD 'password';"
- - psql -U postgres -c "GRANT ALL PRIVILEGES ON DATABASE postgres TO postgres;"
- - psql -U postgres -c "ALTER USER test CREATEDB;"
+  - psql -c 'create database postgres;' -U postgres
+
 script:
   python manage.py test
