@@ -1,4 +1,6 @@
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
 
 from . import views
 from txtbook import views as txtbook_views
@@ -8,7 +10,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('addtextbook', views.addTextbook, name='addTextbook'),
     path('results/',views.search,name="search"),
-    # path('allposts', views.allPosts, name='allPosts'),
     path('textlist',views.textView,name='textlist'),
     path('transfer/<int:pk>',views.transfer,name="transfer"  ),
     path('addexistingtextbook/<int:pk>/',views.addExistingTextbook,name="addExistingTextbook"),
@@ -17,3 +18,6 @@ urlpatterns = [
     path('post/<int:pk>/', views.PostView.as_view(), name='post'),
     path('upload-database',views.textbook_upload,name="textbook_upload"),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

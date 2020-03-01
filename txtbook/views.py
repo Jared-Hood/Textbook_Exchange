@@ -17,16 +17,8 @@ from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 def index(request):
     return render(request, 'txtbook/bootstrap-landing.html')
 
-# def addTextbook(request):
-#     return render(request, 'txtbook/addtextbook.html')
-
-# def allPosts(request):
-#     return render(request, 'txtbook/allposts.html')
-
-
 def text(request, pk):
     return render(request, 'txtbook/text.html', {'textbook': Textbook.objects.get(id=pk)})
-
 
 def textView(request):
     all_text = Textbook.objects.all()
@@ -117,6 +109,7 @@ def addExistingTextbook(request,pk):
         new_condition = request.POST['inlineRadioOptions']
         new_additional_info = request.POST['additionalInfo']
         new_format = request.POST['format']
+        new_image = request.FILES['image']
 
         if (new_price == ''):
             print("no new price")
@@ -137,17 +130,15 @@ def addExistingTextbook(request,pk):
             condition=new_condition,
             additional_info=new_additional_info,
             format=new_format,
-            date_published=timezone.now()
+            date_published=timezone.now(),
+            image=new_image
         )
         tp.save()
         return HttpResponseRedirect(tp.get_absolute_url())
-    # =======
-    return render(request, 'txtbook/addExistingTextbook.html', {'textbook':Textbook.objects.get(id=pk)})
-    # >>>>>>> 0b2597a8a7905ec2e8f13a8e580f82950ccaf5eb
+    # return render(request, 'txtbook/addExistingTextbook.html', {'textbook':Textbook.objects.get(id=pk)})
 
 # Main page to add a textbook.
 def addTextbook(request):
-# <<<<<<< HEAD
         try:
             new_title = request.POST['title']
             new_author = request.POST['author']
@@ -163,6 +154,7 @@ def addTextbook(request):
             new_condition = request.POST['inlineRadioOptions']
             new_additional_info = request.POST['additionalInfo']
             new_format = request.POST['format']
+            new_image = request.FILES['image']
 
             if (new_title == '' or new_price == ''):
                 return render(request, 'txtbook/addTextbook.html', {
@@ -175,7 +167,14 @@ def addTextbook(request):
             })
 
         else:
-            book = Textbook.objects.create(title=new_title, author=new_author, dept=new_dept, classnum = new_classnum, sect = new_sect,isbn = new_isbn, user_created = True)
+
+            if (new_title == '' or new_price == ''):
+                return render(request, 'txtbook/addTextbook.html', {
+                    'error_message': "Your textbook must have a TITLE and PRICE."
+                })
+
+            book = Textbook.objects.create(title=new_title, author=new_author, dept=new_dept, classnum=new_classnum,
+                                           sect=new_sect, isbn=new_isbn, user_created=True)
             book.save()
             tp = TextbookPost(
                 textbook=book,
@@ -187,15 +186,11 @@ def addTextbook(request):
                 condition=new_condition,
                 additional_info=new_additional_info,
                 format=new_format,
-                date_published=timezone.now()
+                date_published=timezone.now(),
+                image=new_image
             )
             tp.save()
-            return HttpResponseRedirect(reverse('txtbook:addTextbook'))
-    # =======
-        return render(request, 'txtbook/addTextbook.html')
-    # >>>>>>> 0b2597a8a7905ec2e8f13a8e580f82950ccaf5eb
-
-
+            return HttpResponseRedirect(tp.get_absolute_url())
 
 # The view function to upload a database to the mysite
 # TODO: add admin protection to the url.
