@@ -62,7 +62,7 @@
         <div class="row big-row">
             <div class="col-2 big-col float-left">
                 {% if post.textbook.user_created == False %}
-                <img src="/static/txtbook/thumbnails/{{post.textbook.isbn}}.jpg" style="display: block; width: 100px; height: 125 px;">
+                <img src="/static/txtbook/thumbnails/{{post.textbook.isbn}}.jpg" style="display: block; width: 150px; height: 175px; margin-left: auto; margin-right: auto">
                 {% elif post.image != 'False' %}
                 <img src="/media/{{ post.image }}" style="display: block; width: 150px; height: 175px; margin-left: auto; margin-right: auto">
                 {% else %}
