@@ -1,0 +1,9 @@
+{% extends 'txtbook/base.html' %}
+
+    {% load static %}
+    {% block content %}
+
+    <h1 class="text-center">Title: {{ textbook.title }}</h1>
+    <h3 class="text-center">Author(s): {{ textbook.author }}</h3>
+
+    {% endblock %}

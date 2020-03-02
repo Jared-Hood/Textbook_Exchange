@@ -8,6 +8,15 @@ body {
   font-family: 'Lato', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+.page-wrap{
+  min-height: calc(100vh - 150px);
+}
+
+.page-wrap:after{
+  content: "";
+  display: block;
+}
+
 h1,
 h2,
 h3,
@@ -21,7 +30,7 @@ h6 {
 header.masthead {
   position: relative;
   background-color: #343a40;
-  background: url({% static 'txtbook/img/rotunda.jpg' %}) no-repeat center center;
+  background: url('/txtbook/img/rotunda.jpg') no-repeat center center;
   background-size: cover;
   padding-top: 8rem;
   padding-bottom: 8rem;
