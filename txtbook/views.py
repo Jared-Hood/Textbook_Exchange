@@ -14,7 +14,7 @@ from .models import Textbook, TextbookPost
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.contrib.auth import logout
 
-# Homepage
+# Homepage //aiosdhoa
 def index(request):
     return render(request, 'txtbook/bootstrap-landing.html')
 
