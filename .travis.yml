@@ -1,8 +1,7 @@
 language: python
 deploy:
   provider: heroku
-  api_key:
-    secure: fa08ea17-ce58-48d0-81c2-81731aeb9141
+  api_key: 6fe5c485-1578-458b-b782-134d5bc25a3a
   app: textbooks-exchange
 services:
   - postgresql

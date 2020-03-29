@@ -10,18 +10,6 @@
         </b></h1>
 </div>
 
-<!-- {% if latest_post_list %}
-<ul class="text-center">
-    {% for post in latest_post_list %}
-    <p class="text-center"><a class="text-center" href="{% url 'txtbook:post' post.id%}"> {{ post.textbook }}</a></p>
-    {% endfor %}
-</ul>
-{% else %}
-<p class="text-center">No posts are available.</p>
-{% endif %} -->
-
-
-
 <style>
     .my-container {
         border: 1px solid lightgray;
@@ -67,26 +55,53 @@
                 {% elif post.image != 'False' %}
                 <img src="/media/{{ post.image }}" style="display: block; width: 150px; height: 175px; margin-left: auto; margin-right: auto">
                 {% else %}
-                <!-- <img src="/media/images/no_image_available.png" style="display: block; width: 150px; height: 175px; margin-left: auto; margin-right: auto"> -->
-                <!--https://image.flaticon.com/icons/png/512/130/130304.png-->
-                <br><br>
-                <p>No image available.</p>
+                <img src="/media/images/no_image_available.png" style="display: block; width: 150px; height: 175px; margin-left: auto; margin-right: auto">
+
                 {% endif %}
             </div>
             <div class="col-10 big-col">
-                <div class="row header-row">
-                    <h3 class="text-left"><a href="{% url 'txtbook:post' post.id%}">{{ post.textbook.title }}</a></h3>
+                <div class="row my-row text-left">
+                    <div class="col-10 my-col text-left">
+                        <h3 class="text-left"><a href="{% url 'txtbook:post' pk=post.id %}">{{ post.textbook.title }}</a>
+                        </h3>
+                        <h7 class="text-left">Posted {{ post.date_published }}</h7>
+                    </div>
                 </div>
                 <div class="row my-row">
-                    <div class="col-6 row-col">
-                        <div class="sm-row">
-                            <div class="row sm-row">
-                                <div class="col-6 my-col">
-                                    <h5 class='text-left'>Price: ${{ post.price }}</h5>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-3 my-col text-left">
+                        <h5>Price: ${{ post.price }}</h5>
+                        <h6 class='text-left'>Condition: {{ post.condition }} / 5<br>
+                            Format: {{ post.format }}</h6>
                     </div>
+                    <div class="col-4 my-col text-left">
+                        {% if post.textbook.author == '' %}
+                        <h5 class="text-left">Author(s): N/A</h5>
+                        {% else %}
+                        <h5 class="text-left">Author(s): {{post.textbook.author}}</h5>
+                        {% endif %}
+                        {% if post.textbook.isbn == '' %}
+                        <h6 class="text-left">ISBN: N/A</h6>
+                        {% else %}
+                        <h6 class="text-left">ISBN: {{post.textbook.isbn}}</h6>
+                        {% endif %}
+                    </div>
+                    <div class="col-4 my-col text-left">
+                        <h5 class="text-left">
+                            {% if post.textbook.dept == '' %}
+                            Classes: N/A
+                            {% else %}
+                            Classes: {{post.textbook.dept}} {{post.textbook.classnum}}
+                            {% endif %}
+                            <br>
+                            {% if post.textbook.sect == '' %}
+                            Section: N/A
+                            {% else %}
+                            Section: {{post.textbook.sect}}
+                            {% endif %}
+
+                        </h5>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -99,3 +114,5 @@
 {% include 'txtbook/pagination.html' %}
 
 {% endblock %}
+
+<!--https://image.flaticon.com/icons/png/512/130/130304.png-->
