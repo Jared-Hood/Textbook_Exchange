@@ -4,11 +4,20 @@
 <!-- <div class="container-fluid"> -->
 
 {% block content %}
-<div class="jumbotron text-center">
-    <h1><b>
-            <font color="brown"> Current Posts </font>
-        </b></h1>
-</div>
+  <section class="call-to-action text-white text-center">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-9 mx-auto">
+          <h2 class="mb-4">Current Posts </h2>
+        </div>
+        <div class="col-md-1 col-lg-8 col-xl-7 mx-auto">
+        </div>
+      </div>
+    </div>
+  </section>
+<br> </br>
+
 
 <style>
     .my-container {
@@ -114,6 +123,7 @@
                     <div class="col-10 my-col text-left">
                         <h3 class="text-left"><a href="{% url 'txtbook:post' pk=post.id %}">{{ post.textbook.title }}</a>
                         </h3>
+                        <h6 class="text-left">Contact: {{post.email}}</h6>
                         <h7 class="text-left">Posted {{ post.date_published }}</h7>
                     </div>
                 </div>

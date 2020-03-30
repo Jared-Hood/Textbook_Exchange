@@ -2,16 +2,25 @@
 
 {% load static %}
 {% block content %}
-<div class="jumbotron text-center">
-    <h1><b>
-            <font color="brown"> Make a textbook post!</font>
-        </b></h1>
-</div>
+  <section class="call-to-action text-white text-center">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-9 mx-auto">
+          <h2 class="mb-4"> Make a textbook post!</h2>
+        </div>
+        <div class="col-md-1 col-lg-8 col-xl-7 mx-auto">
+        </div>
+      </div>
+    </div>
+  </section>
+
+
 <!-- </div> -->
 
 {% if error_message %}<p class="text-center"><strong>{{ error_message }}</strong></p>
 {% endif %}
-
+<br></br>
 <p class="text-center"> Search for your textbook with the ISBN, title, or author:</p>
 <div class="d-flex justify-content-center">
     <form class="form-inline my-2 my-lg-0 text-center" method="GET" action="{% url 'txtbook:search' %}">
@@ -146,6 +155,7 @@
                             <div class="input-group">
                                 <div class="input-group-prepend"><span class="input-group-text">$</span></div>
                                 <input type="text" class="form-control" id="maxDiff" name="maxDiff">
+                                <input type="hidden" id="email" name="email" value={{user.email}}>
                             </div>
                         </div>
 

@@ -28,6 +28,8 @@ class TextbookPost(models.Model):
     textbook = models.ForeignKey(Textbook, on_delete=models.DO_NOTHING, null=True)
     # price = models.CharField(max_length=100, default='0.0')
     price = models.DecimalField(default=0.00, decimal_places=2, max_digits=10)
+    email = models.CharField(max_length=100, default='')
+    price = models.CharField(max_length=100, default='0.0')
     negotiable = models.CharField(max_length=100, default='Yes')
     exchangable = models.CharField(max_length=100, default='Yes')
     max_diff = models.CharField(max_length=100, default='0.0',blank=True)
