@@ -115,10 +115,15 @@ def addExistingTextbook(request,pk):
         new_additional_info = request.POST['additionalInfo']
         new_format = request.POST['format']
         new_image = request.FILES.get('image', False)
+        new_email = request.POST['email']
 
         if (new_price == ''):
             print("no new price")
             return render(request, 'txtbook/addExistingTextbook.html', {'textbook':Textbook.objects.get(id=pk), 'error_message': "Your posting MUST have a price."})
+
+        if (new_email == ''):
+            return render(request, 'txtbook/addExistingTextbook.html',
+                          {'textbook': Textbook.objects.get(id=pk), 'error_message': "You must be logged in to post a textbook."})
 
     except (KeyError, TextbookPost.DoesNotExist):
         return render(request, 'txtbook/addExistingTextbook.html', {
@@ -136,7 +141,8 @@ def addExistingTextbook(request,pk):
             additional_info=new_additional_info,
             format=new_format,
             date_published=timezone.now(),
-            image=new_image
+            image=new_image,
+            email=new_email
         )
         tp.save()
         return HttpResponseRedirect(tp.get_absolute_url())
