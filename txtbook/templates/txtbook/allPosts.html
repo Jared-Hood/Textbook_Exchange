@@ -73,6 +73,7 @@
                     <div class="col-10 my-col text-left">
                         <h3 class="text-left"><a href="{% url 'txtbook:post' pk=post.id %}">{{ post.textbook.title }}</a>
                         </h3>
+                        <h6 class="text-left">Contact: {{post.email}}</h6>
                         <h7 class="text-left">Posted {{ post.date_published }}</h7>
                     </div>
                 </div>

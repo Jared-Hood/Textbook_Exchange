@@ -26,6 +26,7 @@ class Textbook(models.Model):
 
 class TextbookPost(models.Model):
     textbook = models.ForeignKey(Textbook, on_delete=models.DO_NOTHING, null=True)
+    email = models.CharField(max_length=100, default='')
     price = models.CharField(max_length=100, default='0.0')
     negotiable = models.CharField(max_length=100, default='Yes')
     exchangable = models.CharField(max_length=100, default='Yes')
