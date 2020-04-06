@@ -135,6 +135,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'fzzVAmhvUa5LNn6N8x4q0eSq' # from our google 
 
 SOCIAL_AUTH_URL_NAMESPACE = 'social' # sets the namespace for all social_auth interactions
 
+LOGIN_URL = '/auth/login/google-oauth2/'
+
 """
 Email API configuration settings
 """
