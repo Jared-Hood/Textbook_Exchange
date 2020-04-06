@@ -155,7 +155,7 @@ def search(request):
                 else:
                     query_numeric += char
         if(query_numeric.isnumeric()):
-            results = Textbook.objects.filter(Q(title__icontains=query) | Q(author__icontains=query) | Q(isbn__icontains=query_numeric)).distinct('isbn','title').order_by('title','-isbn').distinct('isbn')
+            results = Textbook.objects.filter(Q(title__icontains=query) | Q(author__icontains=query) | Q(isbn__icontains=query_numeric)).distinct('isbn','title').order_by('title','-isbn').distinct('title')
         else:
             print("not numeric")
             results = Textbook.objects.filter(Q(title__icontains=query)| Q(author__icontains=query)).distinct('isbn','title').distinct('isbn','title').order_by('title','-isbn').distinct('title')
