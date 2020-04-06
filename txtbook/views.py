@@ -10,10 +10,11 @@ from django.template import loader
 from urllib.parse import urlencode
 import csv, io
 from django.shortcuts import redirect
-from .models import Textbook, TextbookPost
+from .models import Textbook, TextbookPost, User, Profile
 from django.core.paginator import Paginator,EmptyPage,PageNotAnInteger
 from django.contrib.auth import logout
-from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.shortcuts import redirect
 
 # Homepage
 def index(request):
@@ -64,11 +65,41 @@ class PostView(generic.DetailView):
     context = TextbookPost
     def get_queryset(self):
         """
-        Excludes any questions that aren't published yet.
+        Excludes any posts that aren't published yet.
         """
         return TextbookPost.objects.filter(date_published__lte=timezone.now())
 
+
+def contactSeller(request, pk):
+    template_name = 'txtbook/contactSeller.html'
+    post = TextbookPost.objects.get(pk=pk)
+
+    return render(request, template_name, {'textbookpost': post})
+
+def sendEmail(request, pk):
+
+    subject = request.POST['subject']
+    Message = request.POST['message']
+    from_email = request.POST['from_email']
+    to_email = request.POST['to_email']
+
+    post = TextbookPost.objects.get(pk=pk)
+
+    send_mail(
+        subject,
+        Message,
+        from_email,
+        [to_email],
+        fail_silently=False,
+    )
+
+    messageSent = True
+
+    return render(request, "txtbook/emailSent.html", {"messageSent" : messageSent, "pk" : pk, 'textbookpost': post})
+
+
 # The function that is called when the search bar is used on the addTextbook page.
+
 def search(request):
     template = 'txtbook/addTextbook.html'
     query = request.GET.get('q')
@@ -172,6 +203,7 @@ def addTextbook(request):
             new_format = request.POST['format']
             new_image = request.FILES.get('image', False)
             new_email = request.POST['email']
+            new_user_id = request.POST['user']
 
             if (new_title == '' or new_price == ''):
                 return render(request, 'txtbook/addTextbook.html', {
@@ -217,8 +249,13 @@ def addTextbook(request):
                 date_published=timezone.now(),
                 image=new_image,
                 email=new_email,
+                # user=User.objects.get(id=new_user_id),
             )
             tp.save()
+
+            posting_user = User.objects.get(id=new_user_id)
+            # posting_user.profile.post_ids.add(tp.id)
+            # posting_user.profile.posts.add(tp)
             return HttpResponseRedirect(tp.get_absolute_url())
 
 # The view function to upload a database to the mysite
@@ -262,3 +299,104 @@ def filtered_posts_search(request):
 
     return render(request, 'txtbook/filtered_posts_search.html',
                   {'latest_post_list': latest_post_list, 'max_price': max_price, 'sort_date': sort_date})
+
+
+# def profile_page(request, user_id):
+#     model = User
+#     context = User
+#     template = "txtbook/profile_page.html"
+#
+#     return render(request, 'txtbook/profile_page.html')
+
+class profile_page(generic.DetailView):
+    template_name = 'txtbook/profile_page.html'
+    model = Profile
+    context = Profile
+    # context_object_name = 'user_posts'
+
+    # def get_queryset(self):
+    #     return Profile.posts
+
+def create_profile(request):
+    try:
+        new_email = request.POST['email']
+        new_name = request.POST['name']
+        new_venmo = request.POST['venmo']
+        new_year = request.POST['year']
+        new_major = request.POST['major']
+        new_bio = request.POST['bio']
+        new_phone = request.POST['phone']
+        user_id = request.POST['user']
+
+        if (new_name == ''):
+            return render(request, 'txtbook/create_profile.html', {
+                'error_message': "You MUST fill out a name."
+            })
+
+
+    except (KeyError, Profile.DoesNotExist):
+        return render(request, 'txtbook/create_profile.html', {
+            # 'error_message': "One or more of the fields is empty."
+        })
+
+    else:
+
+        if (new_name == ''):
+            return render(request, 'txtbook/create_profile.html', {
+                'error_message': "You MUST fill out a name."
+            })
+
+        p = Profile(
+            user=User.objects.get(id=user_id),
+            email=new_email,
+            name=new_name,
+            venmo=new_venmo,
+            year=new_year,
+            major=new_major,
+            bio=new_bio,
+            phone=new_phone,
+        )
+        p.save()
+        return HttpResponseRedirect(p.get_absolute_url())
+
+
+def edit_profile(request, pk):
+    try:
+        to_edit = User.profile
+
+        new_email = request.POST['email']
+        new_name = request.POST['name']
+        new_venmo = request.POST['venmo']
+        new_year = request.POST['year']
+        new_major = request.POST['major']
+        new_bio = request.POST['bio']
+        new_phone = request.POST['phone']
+        user_id = request.POST['user']
+
+        if (new_name == ''):
+            return render(request, 'txtbook/edit_profile.html', {
+                'error_message': "You MUST fill out a name."
+            })
+
+
+    except (KeyError, Profile.DoesNotExist):
+        return render(request, 'txtbook/edit_profile.html', {
+
+        })
+
+    else:
+
+        if (new_name == ''):
+            return render(request, 'txtbook/edit_profile.html', {
+                'error_message': "You MUST fill out a name."
+            })
+
+        to_edit.name = new_name
+        to_edit.email = new_email
+        to_edit.venmo = new_venmo
+        to_edit.year = new_year
+        to_edit.major = new_major
+        to_edit.bio = new_bio
+        to_edit.phone = new_phone
+
+        return HttpResponseRedirect(p.get_absolute_url())

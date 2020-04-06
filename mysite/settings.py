@@ -100,13 +100,6 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
-
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -141,6 +134,20 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '578373305116-ob626kt1gl6cgfb1772dnf6kpes1al1o.a
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'fzzVAmhvUa5LNn6N8x4q0eSq' # from our google account
 
 SOCIAL_AUTH_URL_NAMESPACE = 'social' # sets the namespace for all social_auth interactions
+
+"""
+Email API configuration settings
+"""
+
+SENDGRID_API_KEY = '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'
+EMAIL_BACKEND = "sendgrid_backend.SendgridBackend"
+
+# Toggle sandbox mode (when running in DEBUG mode)
+SENDGRID_SANDBOX_MODE_IN_DEBUG = True
+
+# echo to stdout or any other file-like object that is passed to the backend via the stream kwarg.
+SENDGRID_ECHO_TO_STDOUT=True
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
