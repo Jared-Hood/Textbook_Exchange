@@ -40,7 +40,17 @@
                 <a class="nav-link" href="{% url 'txtbook:index' %}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'txtbook:addTextbook' %}">Add a Textbook</a>
+                {% if user.is_active %}
+                  {% if user.profile.id == '' %}
+                  <a class="nav-link" href="{% url 'txtbook:create_profile' %}">Add a Textbook</a>
+                  {% else %}
+                  <a class="nav-link" href="{% url 'txtbook:addTextbook' %}">Add a Textbook</a>
+                  {% endif %}
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'txtbook:addTextbook' %}">Add a Textbook</a>
+                </li>
+                {% endif %}
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{% url 'txtbook:textlist' %}">Textbook List</a>
