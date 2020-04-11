@@ -77,7 +77,7 @@ class PostView(generic.DetailView):
         """
         return TextbookPost.objects.filter(date_published__lte=timezone.now())
 
-
+#Test comment
 def contactSeller(request, pk):
     template_name = 'txtbook/contactSeller.html'
     post = TextbookPost.objects.get(pk=pk)
