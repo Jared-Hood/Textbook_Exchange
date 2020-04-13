@@ -83,7 +83,7 @@ def sendEmail(request, pk):
     from_email = request.POST['from_email']
     to_email = request.POST['to_email']
     if Message == '':
-         Message = "Hi! I am interested in buying your textbook {post.textbook.title} for the set price of {post.price} through {post.payment}. Please email me back when you can meet at your convienence."
+         Message = f"Hi! I am interested in buying your textbook {post.textbook.title} for the set price of {post.price} through {post.payment}. Please email me back when you can meet at your convienence."
     send_mail(
         subject,
         Message,
