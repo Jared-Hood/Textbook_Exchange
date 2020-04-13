@@ -184,7 +184,13 @@
                                 <!-- Upload Image -->
                                 <br>
                                 <div class="form-group">
-                                    <label for="exampleFormControlFile1">Upload Image</label>
+                                    <input type="hidden" id="delete_image" name="delete_image" value="not_delete">
+                                    {% if textbookpost.image != 'False' %}
+                                    <label>Delete current image</label>
+                                    <input type="checkbox" id="delete_image" name="delete_image" value="delete_image">
+                                    <br>
+                                    {% endif %}
+                                    <label for="exampleFormControlFile1">Upload New Image</label>
                                     <input type="file" class="form-control-file" id="image" name="image">
                                 </div>
                             </div>
