@@ -367,18 +367,6 @@ def filtered_posts_search(request):
                   {'latest_post_list': latest_post_list, 'max_price': max_price, 'sort_date': sort_date})
 
 
-# def profile_page(request, pk):
-#     model = User
-#     context = User
-#     template = "txtbook/profile_page.html"
-#
-#     textbook_posts = User.textbookpost_set.all()
-#     user_profile = Profile.objects.get(id=pk)
-#
-#     return render(request, 'txtbook/profile_page.html',
-#                   {'textbook_posts': textbook_posts, 'profile': user_profile})
-
-
 # Code to get the ForeignKey set for an object:
 # https://stackoverflow.com/questions/51950416/reversemanytoonedescriptor-object-has-no-attribute-all/51950693
 class profile_page(generic.DetailView):
@@ -483,13 +471,7 @@ def edit_profile(request, pk):
 
 def edit_post_database_text(request, pk):
     try:
-
-        # new_title = request.POST['title']
-        # new_author = request.POST['author']
-        # new_dept = request.POST['dept']
-        # new_classnum = request.POST['classnum']
-        # new_isbn = request.POST['isbn']
-        # new_sect = request.POST['sect']
+        tp = TextbookPost.objects.get(id=pk)
 
         new_price = request.POST['price']
         new_negotiable = request.POST['negotiable']
@@ -499,9 +481,17 @@ def edit_post_database_text(request, pk):
         new_condition = request.POST['inlineRadioOptions']
         new_additional_info = request.POST['additionalInfo']
         new_format = request.POST['format']
-        # new_image = request.FILES.get('image', False)
+        delete_image = request.POST['delete_image']
 
-        tp = TextbookPost.objects.get(id=pk)
+        if tp.image == 'False':
+            new_image = request.FILES.get('image', False)
+        else:
+            if delete_image == 'delete_image':
+                new_image = False
+            else:
+                new_image = tp.image
+
+
 
         if (new_price == ''):
             return render(request, 'txtbook/edit_post_database_text.html', {
@@ -530,7 +520,7 @@ def edit_post_database_text(request, pk):
         tp.condition = new_condition
         tp.additional_info = new_additional_info
         tp.format = new_format
-        # tp.image = new_image
+        tp.image = new_image
         tp.date_published = timezone.now()
 
         tp.save()
@@ -540,6 +530,8 @@ def edit_post_database_text(request, pk):
 
 def edit_post_original_text(request, pk):
     try:
+
+        tp = TextbookPost.objects.get(id=pk)
 
         new_title = request.POST['title']
         new_author = request.POST['author']
@@ -556,9 +548,15 @@ def edit_post_original_text(request, pk):
         new_condition = request.POST['inlineRadioOptions']
         new_additional_info = request.POST['additionalInfo']
         new_format = request.POST['format']
-        # new_image = request.FILES.get('image', False)
+        delete_image = request.POST['delete_image']
 
-        tp = TextbookPost.objects.get(id=pk)
+        if tp.image == 'False':
+            new_image = request.FILES.get('image', False)
+        else:
+            if delete_image == 'delete_image':
+                new_image = False
+            else:
+                new_image = tp.image
 
         if new_title == '' or new_price == '':
             return render(request, 'txtbook/edit_post_original_text.html', {
@@ -608,7 +606,7 @@ def edit_post_original_text(request, pk):
         tp.condition = new_condition
         tp.additional_info = new_additional_info
         tp.format = new_format
-        # tp.image = new_image
+        tp.image = new_image
         tp.date_published = timezone.now()
 
         tp.save()
