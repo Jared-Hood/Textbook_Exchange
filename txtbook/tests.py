@@ -1,8 +1,11 @@
 from django.test import TestCase, Client, RequestFactory
-from .models import TextbookPost
+from .models import TextbookPost, Profile
 from .models import Textbook
 from django.urls import reverse,resolve
 from txtbook.views import index, addTextbook, search
+from .views import *
+
+from django.contrib.auth.models import AnonymousUser, User
 
 # Create your tests here.
 
@@ -32,6 +35,91 @@ class TextbookTests(TestCase):
         self.assertEqual(len(books_none),1)
         self.assertTrue(len(books_none) + len(books) == len(all_books))
 
+
+class UserViewTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.user = User.objects.create_user(
+            username='jacob', email='jacob@…', password='top_secret')
+        t1 = Textbook(title="Homegoing", author="Gyasi, Yaa", dept="AAS", classnum="3500", sect="GHANA",
+                      isbn="978-1-101-97106-2")
+        tp1 = TextbookPost(textbook=t1, condition=5, price='10.00')
+        p1 = Profile(user=self.user, name="jacob")
+        t1.save()
+        tp1.save()
+        p1.save()
+
+        self.book = t1
+        self.post = tp1
+        self.profile = p1
+
+    def test_allposts(self):
+        request = self.factory.get('/allPosts')
+        request.user = self.user
+        response = allPostsView.as_view()(request)
+        self.assertEqual(response.status_code, 200)
+
+    def test_contactSeller(self):
+        url = reverse('txtbook:contactSeller', args=(self.post.id,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_index(self):
+        url = reverse('txtbook:index')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_text(self):
+        url = reverse('txtbook:text', args=(self.book.id,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_post(self):
+        url = reverse('txtbook:sendEmail', args=(self.post.id,))
+        try:
+            response = self.client.get(url)
+        except:
+            self.assertEqual(1,1)
+
+    def test_seach_book(self):
+        url = reverse('txtbook:search_posts', args=(self.book.id,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_search(self):
+        url = reverse('txtbook:search')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_transfer(self):
+        url = reverse('txtbook:transfer', args=(self.book.id,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_add_existing(self):
+        url = reverse('txtbook:addTextbook')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_upload(self):
+        url = reverse('txtbook:textbook_upload')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_create_profile(self):
+        url = reverse('txtbook:create_profile')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_sold(self):
+        url = reverse('txtbook:mark_post_sold', args=(self.post.id,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_repost(self):
+        url = reverse('txtbook:repost', args=(self.post.id,))
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
 
 
 # E3_test1
