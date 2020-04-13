@@ -55,6 +55,7 @@ class allPostsView(generic.ListView):
         Return all posts, ordered by most recent publish date.
         """
         return TextbookPost.objects.filter(
+            date_published_lte=timezone.now(), sold=False,
         ).order_by('-date_published')
 
 # Shows a post individually
@@ -76,13 +77,13 @@ def contactSeller(request, pk):
     return render(request, template_name, {'textbookpost': post})
 
 def sendEmail(request, pk):
-
+    post = TextbookPost.objects,get(pk=pk)
     subject = request.POST['subject']
     Message = request.POST['message']
     from_email = request.POST['from_email']
     to_email = request.POST['to_email']
-
-
+    if Message == '':
+         Message = "Hi! I am interested in buying your textbook {post.textbook.title} for the set price of {post.price} through {post.payment}. Please email me back when you can meet at your convienence."
     send_mail(
         subject,
         Message,
@@ -231,6 +232,7 @@ def addExistingTextbook(request,pk):
         new_format = request.POST['format']
         new_image = request.FILES.get('image', False)
         new_email = request.POST['email']
+        profile_id = request.POST['profile']
 
         if (new_price == ''):
             print("no new price")
@@ -257,6 +259,9 @@ def addExistingTextbook(request,pk):
             format=new_format,
             date_published=timezone.now(),
             image=new_image,
+            email=new_email,
+            profile=Profile.objects.get(id=profile_id),
+            sold=False,
         )
         tp.save()
         return HttpResponseRedirect(tp.get_absolute_url())
@@ -281,6 +286,7 @@ def addTextbook(request):
             new_format = request.POST['format']
             new_image = request.FILES.get('image', False)
             new_email = request.POST['email']
+            profile_id = request.POST['profile']
 
             if (new_title == '' or new_price == ''):
                 return render(request, 'txtbook/addTextbook.html', {
@@ -326,6 +332,8 @@ def addTextbook(request):
                 date_published=timezone.now(),
                 image=new_image,
                 email=new_email,
+                profile=Profile.objects.get(id=profile_id),
+                sold=False,
             )
             tp.save()
 
