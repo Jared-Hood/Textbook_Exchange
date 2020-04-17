@@ -7,25 +7,24 @@
     <div class="container">
       <div class="row">
         <div class="col-xl-9 mx-auto">
-          <h2 class="mb-4"> Make a textbook post!</h2>
+          <h2 class="mb-4"> Search by class:</h2>
         </div>
         <div class="col-md-1 col-lg-8 col-xl-7 mx-auto">
         </div>
       </div>
     </div>
   </section>
-
-<div class="d-flex justify-content-center">
-    <form class="form-inline my-2 my-lg-0 text-center" method="GET" action="{% url 'txtbook:class_search' %}">
-          <div>
-              <input class="form-control mr-sm-2" name="class" value="{{request.GET.class}}" placeholder="Class Department"
-                  aria-label="Search">
-              <input class="form-control mr-sm-2" name="nbr" value="{{request.GET.nbr}}" placeholder="Course Number"
-                      aria-label="Search">
-              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-          </div>
-    </form>
-</div>
+  <div class="d-flex justify-content-center">
+      <form class="form-inline my-2 my-lg-0 text-center" method="GET" action="{% url 'txtbook:class_search' %}">
+            <div>
+                <input class="form-control mr-sm-2" name="class" value="{{request.GET.class}}" placeholder="Class Department"
+                    aria-label="Search">
+                <input class="form-control mr-sm-2" name="nbr" value="{{request.GET.nbr}}" placeholder="Course Number"
+                        aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </div>
+      </form>
+  </div>
 {% if error_message %}<p class="text-center"><strong>{{ error_message }}</strong></p>
 {% endif %}
 <br></br>
@@ -33,6 +32,9 @@
 
 
 <style>
+  .d-flex{
+    margin-top: 30px;
+  }
   .my-container{
     border: 1px solid lightgray;
     margin-top: 10px;
@@ -145,8 +147,10 @@
       {% endif %}
     {% endfor %}
 </ul>
-{% else %}
-<p class="text-center">No textbooks matched the search.</p>
+{% elif dept == "" %}
+  <p class="text-center">No textbooks matched the search.</p>
+{% else  %}
+  <p class="text-center">Search for textbooks!</p>
 {% endif %}
 
 {% if books.has_other_pages %}
@@ -169,7 +173,7 @@
     {% endfor %}
     {% if books.has_next %}
       <li class="page-item"><a class="page-link" aria-label="Next" href="?page={{ books.next_page_number }}&class={{dept}}&nbr={{nbr}}">>></a></li>
-      <li class="page-item"><a class="page-link" aria-label="Last" href="?page={{books.paginator.num_pages}}&class={{dept}}&nbr=={{nbr}}">Last</a></li>
+      <li class="page-item"><a class="page-link" aria-label="Last" href="?page={{books.paginator.num_pages}}&class={{dept}}&nbr={{nbr}}">Last</a></li>
     {% else %}
       <li class="page-item disabled"><a class="page-link"><span>>></span></a></li>
       <li class="page-item disabled"><a class="page-link"><span>Last</span></a></li>

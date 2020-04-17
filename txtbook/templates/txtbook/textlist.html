@@ -17,49 +17,53 @@
 <br> </br>
 
 <style>
-  .my-container {
+  .my-container{
     border: 1px solid lightgray;
     margin-top: 10px;
   }
-
-  .big-col {
+  .big-col{
     padding-top: 15px;
     padding-left: 15px;
-    padding-right: 15px;
-    padding-bottom: 15px;
-  }
-
-  .header-row {
-    padding-top: 15px;
-    padding-left: 15px;
-    padding-right: 15px;
+    padding-right:15px;
     padding-bottom: 2px;
   }
-
-  .my-row {
+  .header-row{
     padding-top: 15px;
+    padding-left: 15px;
+    padding-right:15px;
+    padding-bottom: 2px;
+  }
+  .my-row{
+    padding-top: 0px;
     padding-bottom: 5px;
   }
-
-  .sm-row {
+  .sm-row{
     padding-top: 0px;
-    padding-bottom: 7px;
+    padding-bottom: 0px;
   }
-
-  .big-col {
+  .big-col{
     padding: 10px;
   }
-  .text-left{
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    padding-right: 25px;
+  .pagination{
+    margin-top:1em;
+  }
+  .btn-row{
+    padding-left: 10px;
+    padding-top: 25px;
+  }
+  .btn{
+    margin: 5px;
   }
   .img{
     width: 175px;
     height: 250px;
   }
-</style>
+  .text-left{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  </style>
 {% if books %}
 <ul class="text-center">
     {% for book in books %}
@@ -115,6 +119,18 @@
                   </a>
                 </div>
               </div>
+                <div class="row btn-row">
+                  {% if user.is_active %}
+                    {% if user.profile.id == '' %}
+                    <a class ="btn btn-primary my-2 my-sm-0" type="link" href="{% url 'txtbook:create_profile' %}">Create Listing</a>
+                    {% else %}
+                    <a class ="btn btn-primary my-2 my-sm-0" type="link" href="{% url 'txtbook:transfer' pk=book.id %}">Create Listing</a>
+                    {% endif %}
+                  {% else %}
+                    <a class ="btn btn-primary my-2 my-sm-0" type="link" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'txtbook:addTextbook' %}">Create Listing</a>
+                  {% endif %}
+                  <a class ="btn btn-secondary my-2 my-sm-0" type="link" href="{% url 'txtbook:search_posts' pk=book.id %}">Search Listings</a>
+                </div>
               </div>
           </div>
         </div>
