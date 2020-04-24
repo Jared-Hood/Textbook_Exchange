@@ -7,7 +7,7 @@
     <div class="container">
       <div class="row">
         <div class="col-xl-9 mx-auto">
-          <h2 class="mb-4"> Search by class:</h2>
+          <h2 class="mb-4"> Search by Class:</h2>
         </div>
         <div class="col-md-1 col-lg-8 col-xl-7 mx-auto">
         </div>
@@ -17,7 +17,7 @@
   <div class="d-flex justify-content-center">
       <form class="form-inline my-2 my-lg-0 text-center" method="GET" action="{% url 'txtbook:class_search' %}">
             <div>
-                <input class="form-control mr-sm-2" name="class" value="{{request.GET.class}}" placeholder="Class Department"
+                <input class="form-control mr-sm-2" name="class" value="{{request.GET.class}}" placeholder=" Department (ex: CS)" maxlength="4"
                     aria-label="Search">
                 <input class="form-control mr-sm-2" name="nbr" value="{{request.GET.nbr}}" placeholder="Course Number"
                         aria-label="Search">
@@ -25,6 +25,7 @@
             </div>
       </form>
   </div>
+
 {% if error_message %}<p class="text-center"><strong>{{ error_message }}</strong></p>
 {% endif %}
 <br></br>
