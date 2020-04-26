@@ -25,7 +25,7 @@
                 </div>
                 <div class="col-md-5">
                   <label class="col-md-8 col-form-label form-control-label">Course Number</label>
-                  <input class="form-control mr-sm-2" name="nbr" value="{{request.GET.nbr}}" placeholder="3100"
+                  <input type="number" min="0" max="9999" step="0" patter="\*d" class="form-control mr-sm-2" name="nbr" value="{{request.GET.nbr}}" placeholder="3100"
                           aria-label="Search"><br>
                   <small class="text-info col-md-2">e.g., from BIOL 3100, type 3100</small>
               </div>

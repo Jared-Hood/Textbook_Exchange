@@ -65,12 +65,12 @@
                             </div>
                             <div class="col-sm-4 pb-3">
                                 <label for="classnum">Class #</label>
-                                <input type="text" class="form-control" id="classnum" name="classnum" value="{{ textbookpost.textbook.classnum }}">
+                                <input type="number" min="0" max="9999" step="0" patter="\*d" class="form-control" id="classnum" name="classnum" value="{{ textbookpost.textbook.classnum }}">
                                 <small class="text-info">e.g., from BIOL 3100, type 3100</small>
                             </div>
                             <div class="col-sm-4 pb-3">
                                 <label for="ibsn">Section #</label>
-                                <input type="text" class="form-control" id="sect" name="sect" value="{{ textbookpost.textbook.sect }}">
+                                <input type="number" min="0" max="9999" step="0" patter="\*d" class="form-control" id="sect" name="sect" value="{{ textbookpost.textbook.sect }}">
                             </div>
                         </div>
                         <!-- </form> -->

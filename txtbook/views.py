@@ -184,7 +184,7 @@ def class_search_view(request):
 def search_by_class(request):
     template = 'txtbook/search_by_class.html'
     dept = request.GET.get('class')
-    nbr = request.GET.get('nbr')
+    nbr = str(request.GET.get('nbr'))
     results = []
     if( dept == False and nbr == False):
         return render(request, 'txtbook/search_by_class.html')
@@ -353,9 +353,9 @@ def addTextbook(request):
             new_title = request.POST['title']
             new_author = request.POST['author']
             new_dept = request.POST['dept']
-            new_classnum = request.POST['classnum']
+            new_classnum = str(request.POST['classnum'])
             new_isbn = request.POST['isbn']
-            new_sect = request.POST['sect']
+            new_sect = str(request.POST['sect'])
             new_price = request.POST['price']
             new_negotiable = request.POST['negotiable']
             new_exchangable = request.POST['exchangable']
@@ -473,7 +473,7 @@ def filtered_posts_search(request):
     max_price = request.GET.get('max_price')
 
     dept = request.GET.get('dept')
-    class_num = request.GET.get('class_num')
+    class_num = str(request.GET.get('class_num'))
 
     # query = request.POST['q']
     # sort_date = request.POST['inlineRadioOptions']
@@ -748,9 +748,9 @@ def edit_post_original_text(request, pk):
         new_title = request.POST['title']
         new_author = request.POST['author']
         new_dept = request.POST['dept']
-        new_classnum = request.POST['classnum']
+        new_classnum = str(request.POST['classnum'])
         new_isbn = request.POST['isbn']
-        new_sect = request.POST['sect']
+        new_sect = str(request.POST['sect'])
 
         new_price = request.POST['price']
         new_negotiable = request.POST['negotiable']
