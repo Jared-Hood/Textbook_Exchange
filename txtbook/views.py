@@ -308,6 +308,10 @@ def addExistingTextbook(request,pk):
             print("no new price")
             return render(request, 'txtbook/addExistingTextbook.html', {'textbook':Textbook.objects.get(id=pk), 'error_message': "Please input a reasonable price."})
 
+        if (new_maxdiff != ''):
+            if (float(new_maxdiff) > new_price):
+                return render(request, 'txtbook/addExistingTextbook.html', {'textbook': Textbook.objects.get(id=pk),
+                                                                            'error_message': "Maximum price difference must be less than or equal to the price of the textbook."})
 
         if (new_email == ''):
             return render(request, 'txtbook/addExistingTextbook.html',
@@ -318,6 +322,27 @@ def addExistingTextbook(request,pk):
             # 'error_message': "One or more of the fields is empty."
         })
     else:
+
+        if (new_price != ''):
+            new_price = float(new_price)
+
+        if (new_price == ''):
+            print("no new price")
+            return render(request, 'txtbook/addExistingTextbook.html', {'textbook':Textbook.objects.get(id=pk), 'error_message': "Your posting MUST have a price."})
+
+        if (float(new_price) > 10000):
+            print("no new price")
+            return render(request, 'txtbook/addExistingTextbook.html', {'textbook':Textbook.objects.get(id=pk), 'error_message': "Please input a reasonable price."})
+
+        if (new_maxdiff != ''):
+            if (float(new_maxdiff) > new_price):
+                return render(request, 'txtbook/addExistingTextbook.html', {'textbook': Textbook.objects.get(id=pk),
+                                                                            'error_message': "Maximum price difference must be less than or equal to the price of the textbook."})
+
+        if (new_email == ''):
+            return render(request, 'txtbook/addExistingTextbook.html',
+                          {'textbook': Textbook.objects.get(id=pk), 'error_message': "You must be logged in to post a textbook."})
+
         tp = TextbookPost(
             textbook=Textbook.objects.get(id=pk),
             price=float(new_price),
@@ -385,6 +410,12 @@ def addTextbook(request):
                     'error_message': "Please enter a reasonable price."
                 })
 
+            if (new_maxdiff != ''):
+                if (float(new_maxdiff) > new_price):
+                    return render(request, 'txtbook/addTextbook.html', {
+                        'error_message': "Maximum price difference must be less than or equal to the price of the textbook."
+                    })
+
 
         except (KeyError, TextbookPost.DoesNotExist):
             return render(request, 'txtbook/addTextbook.html', {
@@ -392,6 +423,9 @@ def addTextbook(request):
             })
 
         else:
+
+            if (new_price != ''):
+                new_price = float(new_price)
 
             if (new_title == '' or new_price == ''):
                 return render(request, 'txtbook/addTextbook.html', {
@@ -407,6 +441,12 @@ def addTextbook(request):
                 return render(request, 'txtbook/addTextbook.html', {
                     'error_message': "Please enter a reasonable price."
                 })
+
+            if (new_maxdiff != ''):
+                if (float(new_maxdiff) > new_price):
+                    return render(request, 'txtbook/addTextbook.html', {
+                        'error_message': "Maximum price difference must be less than or equal to the price of the textbook."
+                    })
 
             book = Textbook.objects.create(title=new_title, author=new_author, dept=new_dept, classnum=new_classnum,
                                            sect=new_sect, isbn=new_isbn, user_created=True)
@@ -690,7 +730,7 @@ def edit_post_database_text(request, pk):
             if delete_image == 'delete_image':
                 new_image = False
             else:
-                if request.FILES.get('image', False):
+                if request.FILES.get('image', False) == False:
                     new_image = tp.image
                 else:
                     new_image = request.FILES.get('image', False)
@@ -709,6 +749,13 @@ def edit_post_database_text(request, pk):
                 'error_message': "Please input a reasonable price"
             })
 
+        if (new_maxdiff != ''):
+            if (float(new_maxdiff) > new_price):
+                return render(request, 'txtbook/edit_post_database_text.html', {
+                    'textbookpost': TextbookPost.objects.get(id=pk),
+                    'error_message': "Maximum price difference must be less than or equal to the price of the textbook."
+                })
+
 
 
     except (KeyError, Profile.DoesNotExist):
@@ -723,6 +770,19 @@ def edit_post_database_text(request, pk):
                 'textbookpost': TextbookPost.objects.get(id=pk),
                 'error_message': "You MUST fill out a price."
             })
+
+        if (float(new_price) > 10000):
+            return render(request, 'txtbook/edit_post_database_text.html', {
+                'textbookpost': TextbookPost.objects.get(id=pk),
+                'error_message': "Please input a reasonable price"
+            })
+
+        if (new_maxdiff != ''):
+            if (float(new_maxdiff) > new_price):
+                return render(request, 'txtbook/edit_post_database_text.html', {
+                    'textbookpost': TextbookPost.objects.get(id=pk),
+                    'error_message': "Maximum price difference must be less than or equal to the price of the textbook."
+                })
 
         tp.price = new_price
         tp.negotiable = new_negotiable
@@ -771,7 +831,7 @@ def edit_post_original_text(request, pk):
             if delete_image == 'delete_image':
                 new_image = False
             else:
-                if request.FILES.get('image', False):
+                if request.FILES.get('image', False) == False:
                     new_image = tp.image
                 else:
                     new_image = request.FILES.get('image', False)
@@ -793,6 +853,13 @@ def edit_post_original_text(request, pk):
                 'textbookpost': TextbookPost.objects.get(id=pk),
                 'error_message': "Please input a reasonable price."
             })
+
+        if (new_maxdiff != ''):
+            if (float(new_maxdiff) > new_price):
+                return render(request, 'txtbook/edit_post_original_text.html', {
+                    'textbookpost': TextbookPost.objects.get(id=pk),
+                    'error_message': "Maximum price difference must be less than or equal to the price of the textbook."
+                })
 
     except (KeyError, Profile.DoesNotExist):
         return render(request, 'txtbook/edit_post_original_text.html', {
@@ -818,6 +885,13 @@ def edit_post_original_text(request, pk):
                 'textbookpost': TextbookPost.objects.get(id=pk),
                 'error_message': "Please input a reasonable price."
             })
+
+        if (new_maxdiff != ''):
+            if (float(new_maxdiff) > new_price):
+                return render(request, 'txtbook/edit_post_original_text.html', {
+                    'textbookpost': TextbookPost.objects.get(id=pk),
+                    'error_message': "Maximum price difference must be less than or equal to the price of the textbook."
+                })
 
         tp.textbook.title = new_title
         tp.textbook.author = new_author

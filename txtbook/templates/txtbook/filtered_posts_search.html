@@ -146,9 +146,9 @@
                                 <span class="input-group-text" id="inputGroupPrepend2">$</span>
                             </div>
                             {% if max_price == '' %}
-                            <input type="number" patter="\d*" maxlength="8"  min="0.00" step="0.01" class="form-control" id="max_price" name="max_price" placeholder="100">
+                            <input type="number" patter="\d*" maxlength="8"  min="0.00" max="10000.00" step="0.01" class="form-control" id="max_price" name="max_price" placeholder="100">
                             {% else %}
-                            <input type="number" patter="\d*" maxlength="8"  min="0.00" step="0.01" class="form-control" id="max_price" name="max_price" value="{{max_price}}">
+                            <input type="number" patter="\d*" maxlength="8"  min="0.00" max="10000.00" step="0.01" class="form-control" id="max_price" name="max_price" value="{{max_price}}">
                             {% endif %}
                         </div>
                     </div>

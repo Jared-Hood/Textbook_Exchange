@@ -17,12 +17,13 @@
   </section>
 <!-- </div> -->
 
-
+<br><br>
+{% if error_message %}<p class="text-center" style="color:red"><strong>{{ error_message }}</strong></p>
+{% endif %}
 <p class="text-center">All posts must have the Sale Information section filled out.</p>
 <p class="text-center">Fields marked with the <h8 style="color:red">*</h8> symbol must be filled out.</p>
 
-{% if error_message %}<p class="text-center" style="color:red"><strong>{{ error_message }}</strong></p>
-{% endif %}
+
 
 <!----- Code for Forms: https://www.codeply.com/go/JVP2nxfv0p/bootstrap-4-forms ------------------------>
 <!----- Additional Formatting Information from: https://getbootstrap.com/docs/4.0/components/forms/ ---->
@@ -223,7 +224,9 @@
                                 <br>
                                 <div class="form-group">
                                     <label for="exampleFormControlFile1">Upload Image</label>
-                                    <input type="file" class="form-control-file" id="image" name="image">
+                                    <!-- Image restriction: https://flaviocopes.com/how-to-accept-images-file-input/ -->
+                                    <input type="file" accept="image/png,image/jpg,image/jpeg" class="form-control-file" id="image" name="image">
+                                    <small class="text-info">Accepted file types: .jpg, .jpeg, .png</small>
                                 </div>
                             </div>
 

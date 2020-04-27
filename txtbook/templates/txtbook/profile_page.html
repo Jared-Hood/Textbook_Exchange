@@ -193,7 +193,7 @@
                                         <div class="col-md-9">
                                             <a href="{% url 'txtbook:post' pk=post.id %}">{{ post.textbook.title }}</a>
                                         </div>
-                                        <div class="col-md-3 pb-1">
+                                        <div class="col-md-3 pb-1 float-right">
                                             <a class="btn btn-outline-success btn-sm" role="button" href="{% url 'txtbook:repost' pk=post.id %}">Repost</a>
                                             <a role="button" href="{% url 'txtbook:delete_post' post_pk=post.id profile_pk=user.profile.id %}">
                                                 <i class="fa fa-trash" style="margin-left: 10px; margin-right: 10px; font-size: 20px"></i>
@@ -201,12 +201,13 @@
                                         </div>
                                         
                                     </div>
-                                    
+                                    <hr>
                                     {% endfor %}
+                                    
                                 {% else %}
                                 <p style="color: gray">No textbooks sold.</p>
                                 {% endif %}
-                                <hr>
+                                
                             {% endif %}
                             <!-- </div> -->
                             <br><br>

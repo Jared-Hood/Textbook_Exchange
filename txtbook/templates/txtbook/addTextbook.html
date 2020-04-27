@@ -211,7 +211,9 @@
                             <br>
                             <div class="form-group">
                                 <label for="exampleFormControlFile1">Upload Image</label>
-                                <input type="file" class="form-control-file" id="image" name="image">
+                                <!-- Image restriction: https://flaviocopes.com/how-to-accept-images-file-input/ -->
+                                <input type="file" accept="image/png,image/jpg,image/jpeg" class="form-control-file" id="image" name="image">
+                                <small class="text-info">Accepted file types: .jpg, .jpeg, .png</small>
                             </div>
                         </div>
 
