@@ -1,0 +1,11 @@
+language: python
+deploy:
+  provider: heroku
+  api_key: 6fe5c485-1578-458b-b782-134d5bc25a3a
+  app: textbooks-exchange
+services:
+  - postgresql
+before_script:
+  - psql -c 'alter user postgres createdb;' -U postgres
+script:
+  python manage.py test

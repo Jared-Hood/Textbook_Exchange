@@ -1,0 +1,37 @@
+{% extends 'txtbook/base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="call-to-action text-white text-center" style="position: absolute; top: 0; bottom: 0; width: 100%;">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-9 mx-auto">
+                <br>
+                {% if messageSent %}
+
+                    <h1 class="mb-4" style="white-space: nowrap;"> Email successfully sent to {{textbookpost.email}} </h1>
+                    <br>
+                    <h4 class="mb-4" style="white-space: nowrap;">You should receive a confirmation email shortly at {{user.email}}</h4>
+
+                {% else %}
+                    <h1 class="mb-4" style="white-space: nowrap;"> Error sending email to {{textbookpost.email}} </h1>
+
+                {% endif %}
+
+                <br>
+                <br>
+                <div class="d-flex justify-content-center" >
+                    <form action="{% url 'txtbook:homepage' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-primary btn-lg" style="margin-top: 50px;">  Return to Homepage</button>
+                     </form>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-1 col-lg-8 col-xl-7 mx-auto"></div>
+    </div>
+</section>
+
+{% endblock %}

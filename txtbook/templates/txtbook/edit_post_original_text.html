@@ -1,0 +1,304 @@
+{% extends 'txtbook/base.html' %}
+
+{% load static %}
+{% block content %}
+
+<section class="call-to-action text-white text-center">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-9 mx-auto">
+          <h2 class="mb-0"> Edit textbook post: {{ textbookpost.textbook.title }}</h2>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<br><br>
+{% if error_message %}<p class="text-center" style="color:red"><strong>{{ error_message }}</strong></p>
+{% endif %}
+<p class="text-center">Fields marked with the <h8 style="color:red">*</h8> symbol must be filled out.</p>
+
+<!----- Code for Forms: https://www.codeply.com/go/JVP2nxfv0p/bootstrap-4-forms ------------------------>
+<!----- Additional Formatting Information from: https://getbootstrap.com/docs/4.0/components/forms/ ---->
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <span class="anchor" id="formUserEdit"></span>
+
+            <form class="form" role="form" autocomplete="off" action="{% url 'txtbook:edit_post_original_text' pk=textbookpost.id %}" method="post"
+            enctype="multipart/form-data">
+            {% csrf_token %}
+            <!--------------------------------------- Textbook Info ---------------------------------------------->
+            
+            <div class="card card-outline-secondary">
+                <!--- Header Info -->
+                <div class="card-header">
+                        <h3 class="mb-0">Textbook Information</h3>
+                    </div>
+            <div class="card-body">
+                        <!-- Form row: Textbook Title -->
+                        <div class="form-group row">
+                            <label class="col-lg-2 col-form-label form-control-label">Textbook Title<h8 style="color: red">*</h8></label>
+                            <div class="col-lg-10">
+                                <input class="form-control" type="text" name="title" id="title" value="{{ textbookpost.textbook.title }}">
+                            </div>
+                        </div>
+                        <!-- Form row: Author, Department, Class # -->
+                        <div class="form-row mt-4">
+                            <div class="col-sm-6 pb-3">
+                                <label for="author">Author(s)</label>
+                                <input type="text" class="form-control" name="author" id="author" value="{{ textbookpost.textbook.author }}">
+                            </div>
+                            <div class="col-sm-6 pb-3">
+                                <label for="author">ISBN #</label>
+                                <input type="text" class="form-control" id="isbn" name="isbn" value="{{ textbookpost.textbook.isbn }}">
+                            </div>
+                        </div>
+
+                        <!-- Form row: IBSN #, Price, Negotiable Price Option -->
+                        <div class="form-row mt-1">
+                            <div class="col-sm-4 pb-3">
+                                <label for="dept">Department </label>
+                                <input type="text" class="form-control" id="dept" name="dept" value="{{ textbookpost.textbook.dept }}">
+                                <small class="text-info">e.g., BIOL</small>
+                            </div>
+                            <div class="col-sm-4 pb-3">
+                                <label for="classnum">Class #</label>
+                                <input type="number" min="0" max="9999" step="0" patter="\*d" class="form-control" id="classnum" name="classnum" value="{{ textbookpost.textbook.classnum }}">
+                                <small class="text-info">e.g., from BIOL 3100, type 3100</small>
+                            </div>
+                            <div class="col-sm-4 pb-3">
+                                <label for="ibsn">Section #</label>
+                                <input type="number" min="0" max="9999" step="0" patter="\*d" class="form-control" id="sect" name="sect" value="{{ textbookpost.textbook.sect }}">
+                            </div>
+                        </div>
+                        <!-- </form> -->
+                </div>
+            </div>
+
+            
+            <br><br>
+
+            <!--------------------------------------- Sale Info ---------------------------------------------->
+            <div class="card card-outline-secondary">
+                <!--- Header Info -->
+                <div class="card-header">
+                    <h3 class="mb-0">Sale Information</h3>
+                </div>
+
+                <!--- Body -->
+                <div class="card-body">
+                        <!-- Get User Info -->
+                        <input type="hidden" id="email" name="email" value={{user.email}}>
+                        <input type="hidden" id="user" name="user" value={{user.id}}>
+                        <input type="hidden" id="profile" name="profile" value={{user.profile.id}}>
+
+                        <!-- Form row: Textbook Format, Price, Negotiable Price Option -->
+                        <div class="form-row mt-1">
+                            <div class="col-sm-5 pb-3">
+                                <label for="negotiable">Textbook Format</label>
+                                <select class="form-control" id="format" name="format">
+                                    {% if textbookpost.format == 'Hard Cover' %}
+                                    <option selected>Hard Cover</option>
+                                    {% else %}
+                                    <option>Hard Cover</option>
+                                    {% endif %}
+                                    
+                                    {% if textbookpost.format == 'Loose Leaf' %}
+                                    <option selected>Loose Leaf</option>
+                                    {% else %}
+                                    <option>Loose Leaf</option>
+                                    {% endif %}
+
+                                    {% if textbookpost.format == 'Other (specify in Additional Information)' %}
+                                    <option selected>Other (specify in Additional Information)</option>
+                                    {% else %}
+                                    <option>Other (specify in Additional Information)</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <div class="col-sm-4 pb-3">
+                                <label for="price">Price<h8 style="color: red">*</h8></label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+                                    <input step="0.01" type="number" min="0.00" class="form-control" id="price" name="price" value="{{ textbookpost.price}}">
+                                </div>
+                            </div>
+                            <div class="col-sm-3 pb-3">
+                                <label for="negotiable">Negotiable Price</label>
+                                <select class="form-control" id="negotiable" name="negotiable">
+                                    {% if textbookpost.negotiable == 'Yes' %}
+                                    <option selected>Yes</option>
+                                    {% else %}
+                                    <option>Yes</option>
+                                    {% endif %}
+
+                                    {% if textbookpost.negotiable == 'No' %}
+                                    <option selected>No</option>
+                                    {% else %}
+                                    <option>No</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Form row: Exchangable, Max Price Diff, Payment Method -->
+                        <div class="form-row mt-3">
+                            <div class="col-sm-2 pb-3">
+                                <label for="exchangable">Exchangable</label>
+                                <select class="form-control" id="exchangable" name="exchangable">
+                                    {% if textbookpost.exchangable == 'Yes' %}
+                                    <option selected>Yes</option>
+                                    {% else %}
+                                    <option>Yes</option>
+                                    {% endif %}
+
+                                    {% if textbookpost.exchangable == 'No' %}
+                                    <option selected>No</option>
+                                    {% else %}
+                                    <option>No</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+
+                            <div class="col-sm-5 pb-3">
+                                <label for="maxdiff">If exchangable, maximum price difference:</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend"><span class="input-group-text">$</span></div>
+                                    <input step="0.01" patter="\d*" maxlength="8" type="number" min="0.00" class="form-control" id="maxDiff" name="maxDiff" value="{{ textbookpost.max_diff}}">
+                                </div>
+                                <small class="text-info">Exchangable refers to whether you would trade your textbook for other books of similar value. Leave blank if not exchangable.</small>
+                            </div>
+
+                            <div class="col-sm-5 pb-3">
+                                <label for="payment">Preferred Method of Payment</label>
+                                <select class="form-control" id="payment" name="payment">
+                                    {% if textbookpost.payment == 'Venmo' %}
+                                    <option selected>Venmo</option>
+                                    {% else %}
+                                    <option>Venmo</option>
+                                    {% endif %}
+
+                                    {% if textbookpost.payment == 'Cash' %}
+                                    <option selected>Cash</option>
+                                    {% else %}
+                                    <option>Cash</option>
+                                    {% endif %}
+
+                                    {% if textbookpost.payment == 'Other (specify in Additional Information)' %}
+                                    <option selected>Other (specify in Additional Information)</option>
+                                    {% else %}
+                                    <option>Other (specify in Additional Information)</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+
+                            <!-- Condition -->
+                            <div class="col-md-6 pb-3">
+                                <label for="condition">Condition</label>
+                                <div class="form-group small">
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label">
+                                            {% if textbookpost.condition == '1' %}
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="1/5"
+                                                value="1" checked="checked"> 1
+                                            {% else %}
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="1/5"
+                                                value="1"> 1
+                                            {% endif %}
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label">
+                                            {% if textbookpost.condition == '2' %}
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="2/5"
+                                                value="2" checked="checked"> 2
+                                            {% else %}
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="2/5"
+                                                value="2"> 2
+                                            {% endif %}
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label">
+                                            {% if textbookpost.condition == '3' %}
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="3/5"
+                                                value="3" checked="checked"> 3
+                                            {% else %}
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="3/5"
+                                                value="3"> 3
+                                            {% endif %}
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label">
+                                            {% if textbookpost.condition == '4' %}
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="4/5"
+                                                value="4" checked="checked"> 4
+                                            {% else %}
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="4/5"
+                                                value="4"> 4
+                                            {% endif %}
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <label class="form-check-label">
+                                            {% if textbookpost.condition == '5' %}
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="5/5"
+                                                value="5" checked="checked"> 5
+                                            {% else %}
+                                            <input class="form-check-input" type="radio" name="inlineRadioOptions" id="5/5"
+                                                value="5"> 5
+                                            {% endif %}
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <small class="text-info">
+                                            1 = very worn to 5 = almost new
+                                        </small>
+                                    </div>
+                                </div>
+
+                                <!-- Upload Image -->
+                                <br>
+                                <div class="form-group">
+                                    <input type="hidden" id="delete_image" name="delete_image" value="not_delete">
+                                    {% if textbookpost.image != 'False' %}
+                                    <label>Delete current image</label>
+                                    <input type="checkbox" id="delete_image" name="delete_image" value="delete_image">
+                                    <br>
+                                    {% endif %}
+                                    <label for="exampleFormControlFile1">Upload New Image</label>
+                                    <!-- Image restriction: https://flaviocopes.com/how-to-accept-images-file-input/ -->
+                                    <input type="file" accept="image/png,image/jpg,image/jpeg" class="form-control-file" id="image" name="image">
+                                    <small class="text-info">Accepted file types: .jpg, .jpeg, .png</small>
+                                </div>
+                            </div>
+
+                            <!-- Additional Info -->
+                            <div class="col-md-6 pb-3">
+                                <label for="moreInfo">Additional Information</label>
+                                <textarea class="form-control" id="additionalInfo" rows=5 name="additionalInfo" value="{{ textbookpost.additional_info }}">{{textbookpost.additional_info}}</textarea>
+                                <small class="text-info">
+                                    Add any other details/information here.
+                                </small>
+                            </div>
+                        </div>
+
+
+                </div>
+
+            </div><br>
+            <!--- End pf Form Buttons -->
+            <div class="col-lg-9">
+                <button class="btn btn-secondary"><a href="{% url 'txtbook:post' pk=textbookpost.id %}" style="color: white">Cancel</a></button>
+                <input type="submit" class="btn btn-primary" value="Save Changes">
+            </div>
+            </form>
+            <br><br><br><br><br><br>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

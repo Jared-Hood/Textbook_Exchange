@@ -1,0 +1,153 @@
+{% extends 'txtbook/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container">
+    <!-- Textbook Info -->
+    <div class="col-md-11" style="margin-left:120px">
+    <br><br>
+    <div class="container my-container">
+        
+        <div class="row big-row">
+            
+                <div class="col-2 big-col float-left">
+                        {% if textbookpost.image != 'False' %}
+                        <img class="img-fluid" src="/media/{{ textbookpost.image }}" style="display: block; width: 175px; height: 225px; margin-left: auto; margin-right: auto">
+                        <small>User uploaded.</small>
+                        {% elif textbookpost.textbook.user_created == False %}
+                        <img class="img-fluid" src="/static/txtbook/thumbnails/{{textbook.isbn}}.jpg" style="display: block; width: 175px; height: 225px; margin-left: auto; margin-right: auto">
+                        <small>Database image.</small>
+                        {% else %}
+                        <small style="margin-left: 20px; margin-top: 0px; color: gray; border-top: 0px; text-align: center">No images available.</small>
+                        {% endif %}
+                </div>
+                <div class="col-10 big-col">
+                    <div class="row my-row">
+                        <div class="col-6 my-col">
+                            <h4 class="text-left">Textbook: {{textbook.title}}</h4>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                            <div class="col-6 my-col">
+                                <h5 class='text-left'><u>Price: ${{textbookpost.price}}</u></h5>
+                            </div>
+                        </div>
+
+                    <div class="row my-row">
+                        <div class="col-9 my-col">
+                            <div class="row">
+                                <div class="col-6  my-col">
+                                    <h5 class="text-left">Author(s):
+                                    {% if textbook.author == '' %}
+                                    <h7 style="color: gray">N/A</h7>
+                                    {% else %}
+                                    <h7>{{textbook.author}}</h7>
+                                    {% endif %}
+                                    </h5>
+                                </div>
+                                <div class="col-6 my-col">
+                                    <h5 class="text-left">ISBN:
+                                    {% if textbook.isbn == '' %}
+                                    <h7 style="color: gray">N/A</h7>
+                                    {% else %}
+                                    <h7>{{textbook.isbn}}</h7>
+                                    {% endif %}
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row my-row">
+                        <div class="col-9 row-col">
+                            <div class="row">
+                                <div class="col-6  my-col">
+                                    <h5 class="text-left">Classes:
+                                    {% if textbook.author == '' %}
+                                    <h7 style="color: gray">N/A</h7>
+                                    {% else %}
+                                    <h7>{{textbook.author}}</h7>
+                                    {% endif %}
+                                    </h5>
+                                </div>
+                                <div class="col-6  my-col">
+                                    <h5 class="text-left">
+                                        {% if textbook.sect == '' %}
+                                        Section: <h7 style="display: inline; color: gray">N/A</h7>
+                                        {% else %}
+                                            {% if textbook.sect|length == 1 %}
+                                            Section: 00{{textbook.sect}}
+                                            {% else %}
+                                            Section: {{textbook.sect}}
+                                            {% endif %}
+                                        {% endif %}
+                                    </h5>
+                                </div>
+                            </div>
+
+                            
+                            <br>
+                            <div class="row">
+                                <div class="col-6 my-col">
+                                    <h5 class='text-left' style="white-space: nowrap;"><u>Seller: {{textbookpost.profile.name}}</u></h5>
+                                </div>
+                                <div class="col-6 my-col">
+                                    <h5 class='text-left' style="white-space: nowrap;"><u>Email: {{textbookpost.email}}</u></h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 my-col">
+                                    {% if textbookpost.profile.venmo == '' %}
+                                    <h5 class='text-left'>Venmo: <h7 style="color:gray">N/A</h7></h5>
+                                    {% else %}
+                                    <h5 class='text-left'>Venmo: @{{textbookpost.profile.venmo}}</h5>
+                                    {% endif %}
+                                </div>
+                                <div class="col-6 my-col">
+                                    {% if textbookpost.profile.phone == '' %}
+                                    <h5 class='text-left'>Phone: <h7 style="color:gray">N/A</h7></h5>
+                                    {% else %}
+                                    <h5 class='text-left'>Phone: {{textbookpost.profile.phone}}</h5>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            
+        </div>
+    </div>
+    <br><br>
+
+    <div class="container">
+
+    </div>
+
+    <div class="container">
+
+        <div id="email_form" style="padding-top: 20px;">
+            <form class="form" role="form" autocomplete="off" action= "{% url 'txtbook:sendEmail' pk=textbookpost.id %}"
+                                method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="col-md-7 pb-3">
+                    <h3>
+                        <label for="message" style="white-space: nowrap;"><strong>Type your message to {{textbookpost.email}} here</strong></label>
+                    </h3>
+                    <textarea class="form-control" style="width: 150%" id="message" rows=6 name="message" placeholder="Hi! I am interested in buying your textbook '{{textbookpost.textbook.title}}' for the set price of {{textbookpost.price}} through {{textbookpost.payment}}. Please email me back when you can meet at your convienence."></textarea>
+                    <input type="hidden" id="from_email" name="from_email" value={{user.email}}>
+                    <input type="hidden" id="subject" name="subject" value="Selling Textbook">
+                    <input type="hidden" id="to_email" name="to_email" value={{textbookpost.email}}>
+                </div>
+
+                <div style="padding-left: 20px">
+                    <button type="submit" class="btn btn-primary btn-lg">  Send email from {{user.email}}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load  static %}
+<!-- Template for landing page found here: https://github.com/BlackrockDigital/startbootstrap-landing-page -->
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous" color="blue">
+
+  <!-- Pencil icon: https://www.w3schools.com/icons/tryit.asp?filename=tryicons_fa-pencil -->
+  <!-- Other icons: https://www.w3schools.com/w3css/w3css_icons.asp 
+  https://www.w3schools.com/icons/fontawesome_icons_webapp.asp-->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <title>Textbook Exchange</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom fonts for this template -->
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+  <!-- Custom styles for this template -->
+  <link href="/static/txtbook/css/landing-page.min.css" rel="stylesheet">
+
+
+
+</head>
+
+<body>
+
+  <!-- Navigation -->
+    <!-- Code for navbar from https://www.w3schools.com/bootstrap4/bootstrap_navbar.asp-->
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'txtbook:homepage' %}">
+                  <i class="fa fa-home" style="font-size:20px"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                {% if user.is_active %}
+                  {% if user.profile.id == '' %}
+                  <a class="nav-link" href="{% url 'txtbook:create_profile' %}">Make a Post</a>
+                  {% else %}
+                  <a class="nav-link" href="{% url 'txtbook:addTextbook' %}">Make a Post</a>
+                  {% endif %}
+                {% else %}
+                  {% if user.profile.id == '' %}
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'txtbook:create_profile' %}">Make a Post</a>
+                  </li>
+                  {% else %}
+                  <li class="nav-item">
+                      <a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'txtbook:addTextbook' %}">Make a Post</a>
+                  </li>
+                  {% endif %}
+                {% endif %}
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'txtbook:textlist' %}">UVA Textbooks</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'txtbook:allPosts' %}">Posts</a>
+            </li>
+            {% if user.is_active %}
+                <li>
+                <a class="nav-link" href="{% url 'txtbook:logout_request' %}">Logout</a>
+                </li>
+            {% else %}
+                {% if user.profile.id == '' %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}?next={% url 'txtbook:create_profile' %}">Login</a>
+                </li>
+                {% else %}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">Login</a>
+                </li>
+                {% endif %}
+            {% endif %}
+        </ul>
+        
+        <!-- <form class="form-inline my-2 my-lg-0" style="margin-left:auto; margin-right:0;" method="GET" action="{% url 'txtbook:search' %}">
+            <input class="form-control mr-lg-2" name='q' type="search" placeholder="Search UVA Textbooks" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+        </form> -->
+        <a style="margin-left:auto; margin-right:0" href="{% url 'txtbook:search_options' %}" type="submit" class="btn btn-outline-success">Search for Textbooks</a>
+        {% if user.is_active %}
+          {% if user.profile.id == '' %}
+          <div class="form-inline my-2 my-lg-0" style="margin-left:10px; margin-right:0;">
+            <a class="btn btn-outline-light my-2 my-sm-0" role="button" href="{% url 'txtbook:create_profile' %}">Create profile</a>
+          </div>
+          {% else %}
+          <div class="form-inline my-2 my-lg-0" style="margin-left:10px; margin-right:0;">
+            <a class="btn btn-outline-light my-2 my-sm-0" role="button" href="{% url 'txtbook:profile_page' pk=user.profile.id %}">
+              <i class="fa fa-user" style="font-size:15px"></i>
+              Profile
+            </a>
+          </div>
+          {% endif %}
+        {% endif %}
+    </nav>
+
+    <div class="page-wrap" style="position: relative;
+    min-height: 100vh; padding-bottom: 2.5rem; ">
+    {% block content %}
+    {% endblock %}
+    </div >
+    <!-- Footer -->
+    <footer class="footer bg-light" style="position: absolute;
+  width: 100%;
+  height: 2.5rem;">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
+            <ul class="list-inline mb-2">
+
+            </ul>
+              <p class="text-muted small mb-4 mb-lg-0">&copy; Red Robins 2020. All Rights Reserved. Email: redrobins@virginia.edu <br> Some design elements from ttps://github.com/BlackrockDigital/startbootstrap-landing-page.</p>
+          </div>
+          <!-- <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
+            <ul class="list-inline mb-0">
+              <li class="list-inline-item mr-3">
+                <a href="#">
+                  <i class="fab fa-facebook fa-2x fa-fw"></i>
+                </a>
+              </li>
+              <li class="list-inline-item mr-3">
+                <a href="#">
+                  <i class="fab fa-twitter-square fa-2x fa-fw"></i>
+                </a>
+              </li>
+              <li class="list-inline-item">
+                <a href="#">
+                  <i class="fab fa-instagram fa-2x fa-fw"></i>
+                </a>
+              </li>
+            </ul>
+          </div> -->
+        </div>
+      </div>
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    </body>
+
+    </html>
